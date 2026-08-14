@@ -1,0 +1,2196 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarePoint Hospital | Appointments</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+    --blue:#1463d8;
+    --blue-dark:#0b4fae;
+    --blue-light:#eef6ff;
+    --green:#12a66a;
+    --orange:#f59e0b;
+    --red:#e5484d;
+    --text:#172033;
+    --muted:#697386;
+    --border:#dfe6ef;
+    --bg:#f4f8fd;
+    --white:#fff;
+    --shadow:0 12px 35px rgba(28,55,90,.10);
+}
+
+body{
+    font-family:Inter,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+button,input,select{font:inherit}
+
+.header{
+    height:72px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.nav{
+    width:min(1200px,94%);
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    font-size:21px;
+    font-weight:800;
+}
+
+.logo{
+    width:42px;
+    height:42px;
+    border-radius:11px;
+    background:var(--blue);
+    color:white;
+    display:grid;
+    place-items:center;
+    font-size:27px;
+    font-weight:900;
+}
+
+.nav-right{
+    display:flex;
+    gap:25px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.emergency{
+    color:var(--red);
+    font-weight:800;
+}
+
+.hero{
+    background:linear-gradient(110deg,#0755b9,#1975e5);
+    color:white;
+}
+
+.hero-inner{
+    width:min(1200px,94%);
+    margin:auto;
+    padding:50px 0 105px;
+}
+
+.hero h1{
+    font-size:clamp(32px,5vw,52px);
+    max-width:700px;
+    line-height:1.08;
+    margin-bottom:15px;
+}
+
+.hero p{
+    max-width:650px;
+    color:#dceaff;
+    line-height:1.7;
+}
+
+.booking{
+    width:min(1200px,94%);
+    margin:-68px auto 60px;
+    position:relative;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+
+.steps{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-bottom:1px solid var(--border);
+}
+
+.step{
+    padding:18px;
+    text-align:center;
+    color:#8993a4;
+    font-size:13px;
+    font-weight:700;
+    border-bottom:3px solid transparent;
+}
+
+.step.active{
+    color:var(--blue);
+    border-color:var(--blue);
+}
+
+.step span{
+    width:27px;
+    height:27px;
+    border-radius:50%;
+    display:inline-grid;
+    place-items:center;
+    background:#edf3fa;
+    margin-right:6px;
+}
+
+.step.active span{
+    background:var(--blue);
+    color:white;
+}
+
+.content{padding:34px}
+
+.title{margin-bottom:25px}
+
+.title h2{
+    font-size:26px;
+    margin-bottom:5px;
+}
+
+.title p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+.department-grid{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.department{
+    padding:15px 10px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:white;
+    cursor:pointer;
+    transition:.2s;
+    text-align:center;
+}
+
+.department:hover{
+    border-color:#8eb8ed;
+    transform:translateY(-1px);
+}
+
+.department.selected{
+    border:2px solid var(--blue);
+    background:var(--blue-light);
+}
+
+.department .icon{
+    font-size:25px;
+    margin-bottom:7px;
+}
+
+.department strong{
+    display:block;
+    font-size:12px;
+}
+
+.department small{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    margin-top:3px;
+}
+
+.doctor-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:15px;
+}
+
+.doctor-toolbar h3{font-size:18px}
+
+.doctor-count{
+    color:var(--green);
+    font-size:13px;
+    font-weight:700;
+}
+
+.search{
+    position:relative;
+    margin-bottom:18px;
+}
+
+.search input{
+    width:100%;
+    padding:14px 17px 14px 43px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    outline:none;
+}
+
+.search input:focus{
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px #eaf2ff;
+}
+
+.search-icon{
+    position:absolute;
+    left:15px;
+    top:13px;
+    color:#8993a4;
+}
+
+.doctors{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.doctor{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:17px;
+    cursor:pointer;
+    transition:.2s;
+    background:white;
+}
+
+.doctor:hover{
+    transform:translateY(-2px);
+    box-shadow:0 7px 20px rgba(0,0,0,.07);
+}
+
+.doctor.selected{
+    border:2px solid var(--blue);
+    background:#f5f9ff;
+}
+
+.doctor-top{
+    display:flex;
+    gap:13px;
+}
+
+.avatar{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:#deecff;
+    display:grid;
+    place-items:center;
+    font-size:28px;
+    flex-shrink:0;
+}
+
+.doctor h4{
+    font-size:15px;
+    margin-bottom:3px;
+}
+
+.specialty{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.rating{
+    color:var(--orange);
+    font-size:12px;
+    margin-top:5px;
+}
+
+.experience{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.doctor-info{
+    border-top:1px solid var(--border);
+    margin-top:14px;
+    padding-top:12px;
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+}
+
+.fee{font-weight:800}
+
+.available{color:var(--green);font-weight:700}
+.limited{color:var(--orange);font-weight:700}
+
+.actions{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:28px;
+}
+
+.btn{
+    border:0;
+    border-radius:9px;
+    padding:14px 22px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.primary{
+    background:var(--blue);
+    color:white;
+    margin-left:auto;
+}
+
+.primary:hover{background:var(--blue-dark)}
+
+.secondary{
+    background:white;
+    color:var(--text);
+    border:1px solid var(--border);
+}
+
+.date-row{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding-bottom:8px;
+}
+
+.date{
+    min-width:88px;
+    padding:12px 7px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:11px;
+    text-align:center;
+    cursor:pointer;
+}
+
+.date small{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.date strong{
+    display:block;
+    font-size:19px;
+    margin:3px 0;
+}
+
+.date.selected{
+    background:var(--blue);
+    color:white;
+    border-color:var(--blue);
+}
+
+.date.selected small{color:#dceaff}
+
+.time-section{margin-top:28px}
+
+.time-groups{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.time-group h4{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:10px;
+}
+
+.times{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.time{
+    padding:11px 4px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:8px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
+}
+
+.time:hover{
+    border-color:var(--blue);
+}
+
+.time.selected{
+    background:var(--blue);
+    color:white;
+    border-color:var(--blue);
+}
+
+.time.booked{
+    background:#f1f3f6;
+    color:#a5adba;
+    text-decoration:line-through;
+    cursor:not-allowed;
+}
+
+.form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:17px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.full{grid-column:1/-1}
+
+.field label{
+    font-size:13px;
+    font-weight:700;
+}
+
+.field input,
+.field select{
+    padding:13px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    outline:none;
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:var(--blue);
+}
+
+.summary{
+    background:#f7faff;
+    border:1px solid #d8e8fb;
+    border-radius:13px;
+    padding:20px;
+    margin-top:25px;
+}
+
+.summary-title{
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+
+.summary-item small{
+    display:block;
+    color:var(--muted);
+    margin-bottom:3px;
+}
+
+.summary-item strong{font-size:14px}
+
+.trust{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:18px;
+}
+
+.trust-item{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px;
+    text-align:center;
+}
+
+.trust-item strong{
+    display:block;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.trust-item small{
+    color:var(--muted);
+    font-size:11px;
+}
+
+.confirmation{
+    display:none;
+    text-align:center;
+    padding:45px 20px;
+}
+
+.check{
+    width:80px;
+    height:80px;
+    margin:auto auto 20px;
+    border-radius:50%;
+    background:#dcf8eb;
+    color:var(--green);
+    display:grid;
+    place-items:center;
+    font-size:43px;
+    font-weight:bold;
+}
+
+.confirmation h2{
+    font-size:29px;
+    margin-bottom:7px;
+}
+
+.confirmation>p{color:var(--muted)}
+
+.booking-id{
+    max-width:430px;
+    margin:25px auto;
+    padding:17px;
+    background:#f5f9ff;
+    border:1px dashed #8eb9ef;
+    border-radius:12px;
+}
+
+.booking-id small{
+    color:var(--muted);
+}
+
+.booking-id strong{
+    display:block;
+    color:var(--blue);
+    font-size:23px;
+    margin-top:4px;
+}
+
+.confirm-card{
+    max-width:560px;
+    margin:auto;
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+    text-align:left;
+}
+
+.confirm-row{
+    display:flex;
+    justify-content:space-between;
+    padding:13px 17px;
+    border-bottom:1px solid var(--border);
+    font-size:14px;
+}
+
+.confirm-row:last-child{border:0}
+
+.confirm-row span{color:var(--muted)}
+
+footer{
+    background:#101a2c;
+    color:white;
+    padding:35px 5%;
+}
+
+.footer-inner{
+    width:min(1200px,100%);
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    gap:25px;
+}
+
+.footer-inner p{
+    color:#aeb8c7;
+    font-size:12px;
+    margin-top:5px;
+}
+
+@media(max-width:1000px){
+    .department-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .doctors{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:700px){
+    .nav-right{display:none}
+
+    .department-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .doctors{
+        grid-template-columns:1fr;
+    }
+
+    .time-groups{
+        grid-template-columns:1fr;
+    }
+
+    .form{
+        grid-template-columns:1fr;
+    }
+
+    .full{grid-column:auto}
+
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+
+    .trust{
+        grid-template-columns:1fr;
+    }
+
+    .content{
+        padding:20px 15px;
+    }
+
+    .steps .step{
+        padding:13px 3px;
+        font-size:10px;
+    }
+
+    .step span{
+        display:block;
+        margin:0 auto 4px;
+    }
+
+    .footer-inner{
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+<div class="nav">
+
+    <div class="brand">
+        <div class="logo">+</div>
+        CarePoint Hospital
+    </div>
+
+    <div class="nav-right">
+        <span>24/7 Emergency</span>
+        <span class="emergency">☎ +91 1800 123 4567</span>
+    </div>
+
+</div>
+</header>
+
+
+<section class="hero">
+<div class="hero-inner">
+
+    <h1>Book your hospital appointment online</h1>
+
+    <p>
+        Find a specialist, check available appointment slots
+        and book your consultation securely in minutes.
+    </p>
+
+</div>
+</section>
+
+
+<div class="booking">
+
+<div class="card">
+
+<div class="steps">
+
+    <div class="step active">
+        <span>1</span> Doctor
+    </div>
+
+    <div class="step">
+        <span>2</span> Date & Time
+    </div>
+
+    <div class="step">
+        <span>3</span> Patient
+    </div>
+
+    <div class="step">
+        <span>4</span> Confirm
+    </div>
+
+</div>
+
+
+<div class="content">
+
+
+<!-- STEP 1 -->
+
+<section id="doctorStep">
+
+<div class="title">
+    <h2>Find a specialist</h2>
+    <p>Select a department and choose your preferred doctor.</p>
+</div>
+
+
+<div class="department-grid">
+
+    <div class="department" data-dept="Cardiology">
+        <div class="icon">❤️</div>
+        <strong>Cardiology</strong>
+        <small>Heart</small>
+    </div>
+
+    <div class="department" data-dept="Neurology">
+        <div class="icon">🧠</div>
+        <strong>Neurology</strong>
+        <small>Brain</small>
+    </div>
+
+    <div class="department" data-dept="Orthopedics">
+        <div class="icon">🦴</div>
+        <strong>Orthopedics</strong>
+        <small>Bones</small>
+    </div>
+
+    <div class="department" data-dept="Pediatrics">
+        <div class="icon">👶</div>
+        <strong>Pediatrics</strong>
+        <small>Children</small>
+    </div>
+
+    <div class="department" data-dept="Dermatology">
+        <div class="icon">🩺</div>
+        <strong>Dermatology</strong>
+        <small>Skin</small>
+    </div>
+
+    <div class="department" data-dept="General Medicine">
+        <div class="icon">⚕️</div>
+        <strong>General Medicine</strong>
+        <small>General</small>
+    </div>
+
+</div>
+
+
+<div class="search">
+    <span class="search-icon">🔎</span>
+    <input
+        id="doctorSearch"
+        type="text"
+        placeholder="Search doctor by name or specialty..."
+    >
+</div>
+
+
+<div class="doctor-toolbar">
+
+    <h3 id="doctorHeading">All specialists</h3>
+
+    <span class="doctor-count" id="doctorCount">
+        ● 41 doctors available
+    </span>
+
+</div>
+
+
+<div class="doctors" id="doctors"></div>
+
+
+<div class="actions">
+
+    <button class="btn primary" id="doctorNext">
+        Continue →
+    </button>
+
+</div>
+
+</section>
+
+
+<!-- STEP 2 -->
+
+<section id="dateStep" style="display:none">
+
+<div class="title">
+    <h2>Choose date & time</h2>
+    <p>
+        Select an available appointment for
+        <strong id="chosenDoctor"></strong>.
+    </p>
+</div>
+
+
+<h3 style="margin-bottom:13px">Select appointment date</h3>
+
+<div class="date-row" id="dates"></div>
+
+
+<div class="time-section">
+
+<div style="display:flex;justify-content:space-between;margin-bottom:13px">
+    <h3>Available time slots</h3>
+    <span class="available">● Available</span>
+</div>
+
+
+<div class="time-groups">
+
+<div class="time-group">
+<h4>MORNING</h4>
+
+<div class="times">
+
+<button class="time">09:00 AM</button>
+<button class="time">09:30 AM</button>
+<button class="time booked">10:00 AM</button>
+<button class="time">10:30 AM</button>
+<button class="time">11:00 AM</button>
+<button class="time booked">11:30 AM</button>
+
+</div>
+</div>
+
+
+<div class="time-group">
+<h4>AFTERNOON</h4>
+
+<div class="times">
+
+<button class="time">02:00 PM</button>
+<button class="time booked">02:30 PM</button>
+<button class="time">03:00 PM</button>
+<button class="time">03:30 PM</button>
+<button class="time booked">04:00 PM</button>
+<button class="time">04:30 PM</button>
+
+</div>
+</div>
+
+</div>
+</div>
+
+
+<div class="actions">
+
+<button class="btn secondary" id="dateBack">← Back</button>
+
+<button class="btn primary" id="dateNext">
+Continue →
+</button>
+
+</div>
+
+</section>
+
+
+<!-- STEP 3 -->
+
+<section id="patientStep" style="display:none">
+
+<div class="title">
+<h2>Patient information</h2>
+<p>Enter the details of the patient attending the appointment.</p>
+</div>
+
+
+<div class="form">
+
+<div class="field">
+<label>Full name *</label>
+<input id="patientName" placeholder="Patient full name">
+</div>
+
+<div class="field">
+<label>Mobile number *</label>
+<input id="phone" maxlength="10" placeholder="10-digit mobile number">
+</div>
+
+<div class="field">
+<label>Email address *</label>
+<input id="email" type="email" placeholder="patient@email.com">
+</div>
+
+<div class="field">
+<label>Date of birth *</label>
+<input id="dob" type="date">
+</div>
+
+<div class="field">
+<label>Gender *</label>
+<select id="gender">
+<option value="">Select gender</option>
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+</div>
+
+<div class="field">
+<label>Patient type</label>
+<select id="patientType">
+<option>New patient</option>
+<option>Existing patient</option>
+</select>
+</div>
+
+<div class="field full">
+<label>Reason for visit *</label>
+<input id="reason"
+placeholder="Briefly describe the reason for consultation">
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button class="btn secondary" id="patientBack">
+← Back
+</button>
+
+<button class="btn primary" id="patientNext">
+Review Appointment →
+</button>
+
+</div>
+
+</section>
+
+
+<!-- STEP 4 -->
+
+<section id="confirmStep" style="display:none">
+
+<div class="title">
+<h2>Review appointment</h2>
+<p>Check your details before confirming your appointment.</p>
+</div>
+
+
+<div class="summary">
+
+<div class="summary-title">Appointment details</div>
+
+<div class="summary-grid">
+
+<div class="summary-item">
+<small>Doctor</small>
+<strong id="reviewDoctor"></strong>
+</div>
+
+<div class="summary-item">
+<small>Department</small>
+<strong id="reviewDepartment"></strong>
+</div>
+
+<div class="summary-item">
+<small>Date</small>
+<strong id="reviewDate"></strong>
+</div>
+
+<div class="summary-item">
+<small>Time</small>
+<strong id="reviewTime"></strong>
+</div>
+
+<div class="summary-item">
+<small>Patient</small>
+<strong id="reviewPatient"></strong>
+</div>
+
+<div class="summary-item">
+<small>Patient type</small>
+<strong id="reviewType"></strong>
+</div>
+
+</div>
+</div>
+
+
+<div class="trust">
+
+<div class="trust-item">
+🔒
+<strong>Secure booking</strong>
+<small>Protected patient information</small>
+</div>
+
+<div class="trust-item">
+✓
+<strong>Instant confirmation</strong>
+<small>Appointment ID generated</small>
+</div>
+
+<div class="trust-item">
+🏥
+<strong>Hospital verified</strong>
+<small>CarePoint Hospital</small>
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button class="btn secondary" id="confirmBack">
+← Edit
+</button>
+
+<button class="btn primary" id="confirmButton">
+Confirm Appointment
+</button>
+
+</div>
+
+</section>
+
+
+<!-- SUCCESS -->
+
+<section class="confirmation" id="successStep">
+
+<div class="check">✓</div>
+
+<h2>Appointment confirmed</h2>
+
+<p>Your appointment has been successfully booked.</p>
+
+
+<div class="booking-id">
+<small>Your appointment ID</small>
+<strong id="bookingId"></strong>
+</div>
+
+
+<div class="confirm-card">
+
+<div class="confirm-row">
+<span>Patient</span>
+<strong id="successPatient"></strong>
+</div>
+
+<div class="confirm-row">
+<span>Doctor</span>
+<strong id="successDoctor"></strong>
+</div>
+
+<div class="confirm-row">
+<span>Department</span>
+<strong id="successDepartment"></strong>
+</div>
+
+<div class="confirm-row">
+<span>Date</span>
+<strong id="successDate"></strong>
+</div>
+
+<div class="confirm-row">
+<span>Time</span>
+<strong id="successTime"></strong>
+</div>
+
+</div>
+
+
+<div class="actions" style="justify-content:center">
+
+<button class="btn primary" onclick="window.print()">
+Print Appointment
+</button>
+
+<button class="btn secondary" onclick="location.reload()">
+Book Another
+</button>
+
+</div>
+
+</section>
+
+</div>
+</div>
+</div>
+
+
+<footer>
+
+<div class="footer-inner">
+
+<div>
+<strong>CarePoint Hospital</strong>
+<p>Quality healthcare, closer to you.</p>
+</div>
+
+<div>
+<p>Emergency: +91 1800 123 4567</p>
+<p>Appointments: +91 1800 555 7890</p>
+</div>
+
+</div>
+
+</footer>
+
+
+<script>
+
+/* =========================================
+   DOCTOR DATABASE
+   41 DOCTORS
+========================================= */
+
+const doctorsData = [
+
+/* CARDIOLOGY */
+
+{
+name:"Dr. Ananya Rao",
+dept:"Cardiology",
+specialty:"Senior Cardiologist",
+experience:"18 years experience",
+rating:"4.9",
+fee:"₹800",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Rohan Mehta",
+dept:"Cardiology",
+specialty:"Interventional Cardiologist",
+experience:"15 years experience",
+rating:"4.8",
+fee:"₹900",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Kavita Sharma",
+dept:"Cardiology",
+specialty:"Cardiac Specialist",
+experience:"14 years experience",
+rating:"4.9",
+fee:"₹850",
+avatar:"👩‍⚕️",
+status:"Limited slots"
+},
+
+{
+name:"Dr. Sanjay Iyer",
+dept:"Cardiology",
+specialty:"Heart Specialist",
+experience:"20 years experience",
+rating:"4.8",
+fee:"₹950",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Meera Joshi",
+dept:"Cardiology",
+specialty:"Preventive Cardiologist",
+experience:"11 years experience",
+rating:"4.7",
+fee:"₹750",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Vikram Menon",
+dept:"Cardiology",
+specialty:"Cardiac Electrophysiologist",
+experience:"16 years experience",
+rating:"4.9",
+fee:"₹1000",
+avatar:"👨‍⚕️",
+status:"Limited slots"
+},
+
+{
+name:"Dr. Pooja Nair",
+dept:"Cardiology",
+specialty:"Clinical Cardiologist",
+experience:"10 years experience",
+rating:"4.8",
+fee:"₹700",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+
+/* NEUROLOGY */
+
+{
+name:"Dr. Arjun Mehta",
+dept:"Neurology",
+specialty:"Senior Neurologist",
+experience:"17 years experience",
+rating:"4.8",
+fee:"₹750",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Neelam Kapoor",
+dept:"Neurology",
+specialty:"Stroke Specialist",
+experience:"16 years experience",
+rating:"4.9",
+fee:"₹850",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Aditya Rao",
+dept:"Neurology",
+specialty:"Epilepsy Specialist",
+experience:"13 years experience",
+rating:"4.7",
+fee:"₹750",
+avatar:"👨‍⚕️",
+status:"Limited slots"
+},
+
+{
+name:"Dr. Sneha Menon",
+dept:"Neurology",
+specialty:"Movement Disorder Specialist",
+experience:"12 years experience",
+rating:"4.8",
+fee:"₹800",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Karan Shah",
+dept:"Neurology",
+specialty:"Neuro Physician",
+experience:"15 years experience",
+rating:"4.9",
+fee:"₹850",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Ritu Verma",
+dept:"Neurology",
+specialty:"Headache Specialist",
+experience:"10 years experience",
+rating:"4.7",
+fee:"₹700",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Nikhil Thomas",
+dept:"Neurology",
+specialty:"Neuro Rehabilitation",
+experience:"11 years experience",
+rating:"4.8",
+fee:"₹700",
+avatar:"👨‍⚕️",
+status:"Limited slots"
+},
+
+
+/* ORTHOPEDICS */
+
+{
+name:"Dr. Vikram Shah",
+dept:"Orthopedics",
+specialty:"Orthopedic Surgeon",
+experience:"19 years experience",
+rating:"4.9",
+fee:"₹700",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Priyanka Rao",
+dept:"Orthopedics",
+specialty:"Joint Replacement Surgeon",
+experience:"14 years experience",
+rating:"4.8",
+fee:"₹850",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Amit Kulkarni",
+dept:"Orthopedics",
+specialty:"Sports Medicine Specialist",
+experience:"12 years experience",
+rating:"4.7",
+fee:"₹750",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Swati Nair",
+dept:"Orthopedics",
+specialty:"Spine Specialist",
+experience:"16 years experience",
+rating:"4.9",
+fee:"₹900",
+avatar:"👩‍⚕️",
+status:"Limited slots"
+},
+
+{
+name:"Dr. Rajiv Bhat",
+dept:"Orthopedics",
+specialty:"Trauma Surgeon",
+experience:"20 years experience",
+rating:"4.8",
+fee:"₹800",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Harish Kumar",
+dept:"Orthopedics",
+specialty:"Knee Specialist",
+experience:"13 years experience",
+rating:"4.8",
+fee:"₹700",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Divya Iyer",
+dept:"Orthopedics",
+specialty:"Pediatric Orthopedics",
+experience:"10 years experience",
+rating:"4.7",
+fee:"₹650",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+
+/* PEDIATRICS */
+
+{
+name:"Dr. Priya Nair",
+dept:"Pediatrics",
+specialty:"Senior Pediatrician",
+experience:"16 years experience",
+rating:"4.9",
+fee:"₹650",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Rahul Joseph",
+dept:"Pediatrics",
+specialty:"Child Specialist",
+experience:"13 years experience",
+rating:"4.8",
+fee:"₹600",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Aisha Khan",
+dept:"Pediatrics",
+specialty:"Neonatologist",
+experience:"15 years experience",
+rating:"4.9",
+fee:"₹800",
+avatar:"👩‍⚕️",
+status:"Limited slots"
+},
+
+{
+name:"Dr. Manish Rao",
+dept:"Pediatrics",
+specialty:"Pediatric Pulmonologist",
+experience:"11 years experience",
+rating:"4.7",
+fee:"₹650",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Shreya Menon",
+dept:"Pediatrics",
+specialty:"Pediatric Nutritionist",
+experience:"9 years experience",
+rating:"4.8",
+fee:"₹550",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Arvind Patel",
+dept:"Pediatrics",
+specialty:"Child Neurologist",
+experience:"14 years experience",
+rating:"4.9",
+fee:"₹750",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Nandini Shah",
+dept:"Pediatrics",
+specialty:"Pediatric Allergy Specialist",
+experience:"10 years experience",
+rating:"4.8",
+fee:"₹600",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+
+/* DERMATOLOGY */
+
+{
+name:"Dr. Neha Kapoor",
+dept:"Dermatology",
+specialty:"Senior Dermatologist",
+experience:"15 years experience",
+rating:"4.8",
+fee:"₹600",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Sameer Jain",
+dept:"Dermatology",
+specialty:"Clinical Dermatologist",
+experience:"12 years experience",
+rating:"4.7",
+fee:"₹550",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Rhea Thomas",
+dept:"Dermatology",
+specialty:"Cosmetic Dermatologist",
+experience:"10 years experience",
+rating:"4.9",
+fee:"₹700",
+avatar:"👩‍⚕️",
+status:"Limited slots"
+},
+
+{
+name:"Dr. Akash Verma",
+dept:"Dermatology",
+specialty:"Hair & Scalp Specialist",
+experience:"11 years experience",
+rating:"4.8",
+fee:"₹650",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Lakshmi Iyer",
+dept:"Dermatology",
+specialty:"Skin Allergy Specialist",
+experience:"13 years experience",
+rating:"4.8",
+fee:"₹600",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Mohan Das",
+dept:"Dermatology",
+specialty:"Dermatologic Surgeon",
+experience:"17 years experience",
+rating:"4.9",
+fee:"₹750",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+
+/* GENERAL MEDICINE */
+
+{
+name:"Dr. Rahul Kumar",
+dept:"General Medicine",
+specialty:"Senior General Physician",
+experience:"18 years experience",
+rating:"4.7",
+fee:"₹500",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Swetha Rao",
+dept:"General Medicine",
+specialty:"Internal Medicine Specialist",
+experience:"14 years experience",
+rating:"4.8",
+fee:"₹550",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Manoj Sharma",
+dept:"General Medicine",
+specialty:"General Physician",
+experience:"16 years experience",
+rating:"4.7",
+fee:"₹500",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Anjali Menon",
+dept:"General Medicine",
+specialty:"Internal Medicine",
+experience:"12 years experience",
+rating:"4.9",
+fee:"₹600",
+avatar:"👩‍⚕️",
+status:"Limited slots"
+},
+
+{
+name:"Dr. Suresh Babu",
+dept:"General Medicine",
+specialty:"General Physician",
+experience:"20 years experience",
+rating:"4.8",
+fee:"₹550",
+avatar:"👨‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Kavya Reddy",
+dept:"General Medicine",
+specialty:"Family Medicine Specialist",
+experience:"10 years experience",
+rating:"4.8",
+fee:"₹500",
+avatar:"👩‍⚕️",
+status:"Available"
+},
+
+{
+name:"Dr. Deepak Nair",
+dept:"General Medicine",
+specialty:"Internal Medicine",
+experience:"15 years experience",
+rating:"4.7",
+fee:"₹550",
+avatar:"👨‍⚕️",
+status:"Available"
+}
+
+];
+
+
+/* STATE */
+
+let selectedDepartment="";
+let selectedDoctor=null;
+let selectedDate="";
+let selectedTime="";
+
+
+/* ELEMENTS */
+
+const doctorsContainer=document.getElementById("doctors");
+const search=document.getElementById("doctorSearch");
+const doctorCount=document.getElementById("doctorCount");
+const doctorHeading=document.getElementById("doctorHeading");
+
+const doctorStep=document.getElementById("doctorStep");
+const dateStep=document.getElementById("dateStep");
+const patientStep=document.getElementById("patientStep");
+const confirmStep=document.getElementById("confirmStep");
+const successStep=document.getElementById("successStep");
+
+const steps=document.querySelectorAll(".step");
+
+
+/* RENDER DOCTORS */
+
+function renderDoctors(){
+
+    const query=search.value.toLowerCase().trim();
+
+    let filtered=doctorsData.filter(d=>{
+
+        const departmentMatch=
+            !selectedDepartment ||
+            d.dept===selectedDepartment;
+
+        const searchMatch=
+            !query ||
+            d.name.toLowerCase().includes(query) ||
+            d.specialty.toLowerCase().includes(query) ||
+            d.dept.toLowerCase().includes(query);
+
+        return departmentMatch && searchMatch;
+
+    });
+
+
+    doctorsContainer.innerHTML="";
+
+
+    filtered.forEach((doctor,index)=>{
+
+        const card=document.createElement("div");
+
+        card.className="doctor";
+
+        card.innerHTML=`
+
+            <div class="doctor-top">
+
+                <div class="avatar">
+                    ${doctor.avatar}
+                </div>
+
+                <div>
+
+                    <h4>${doctor.name}</h4>
+
+                    <div class="specialty">
+                        ${doctor.specialty}
+                    </div>
+
+                    <div class="rating">
+                        ★★★★★ ${doctor.rating}
+                    </div>
+
+                    <div class="experience">
+                        ${doctor.experience}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="doctor-info">
+
+                <span class="fee">
+                    ${doctor.fee} consultation
+                </span>
+
+                <span class="${
+                    doctor.status==="Available"
+                    ? "available"
+                    : "limited"
+                }">
+
+                    ● ${doctor.status}
+
+                </span>
+
+            </div>
+        `;
+
+
+        card.addEventListener("click",()=>{
+
+            document.querySelectorAll(".doctor")
+                .forEach(d=>d.classList.remove("selected"));
+
+            card.classList.add("selected");
+
+            selectedDoctor=doctor;
+
+        });
+
+
+        doctorsContainer.appendChild(card);
+
+    });
+
+
+    doctorCount.textContent=
+        `● ${filtered.length} doctor${filtered.length!==1?"s":""} found`;
+
+}
+
+
+renderDoctors();
+
+
+/* DEPARTMENTS */
+
+document.querySelectorAll(".department")
+.forEach(dept=>{
+
+    dept.addEventListener("click",()=>{
+
+        document.querySelectorAll(".department")
+            .forEach(d=>d.classList.remove("selected"));
+
+        dept.classList.add("selected");
+
+        selectedDepartment=dept.dataset.dept;
+
+        selectedDoctor=null;
+
+        doctorHeading.textContent=
+            selectedDepartment+" specialists";
+
+        renderDoctors();
+
+    });
+
+});
+
+
+/* SEARCH */
+
+search.addEventListener("input",renderDoctors);
+
+
+/* DATES */
+
+const dates=document.getElementById("dates");
+
+function generateDates(){
+
+    dates.innerHTML="";
+
+    const today=new Date();
+
+    for(let i=0;i<7;i++){
+
+        const d=new Date(today);
+
+        d.setDate(today.getDate()+i);
+
+        const dateString=
+            d.toISOString().split("T")[0];
+
+        const el=document.createElement("button");
+
+        el.className="date";
+
+        el.innerHTML=`
+
+            <small>
+                ${d.toLocaleDateString("en-IN",{weekday:"short"})}
+            </small>
+
+            <strong>${d.getDate()}</strong>
+
+            <small>
+                ${d.toLocaleDateString("en-IN",{month:"short"})}
+            </small>
+        `;
+
+
+        el.addEventListener("click",()=>{
+
+            document.querySelectorAll(".date")
+                .forEach(x=>x.classList.remove("selected"));
+
+            el.classList.add("selected");
+
+            selectedDate=dateString;
+
+        });
+
+
+        dates.appendChild(el);
+
+    }
+
+}
+
+generateDates();
+
+
+/* TIMES */
+
+document.querySelectorAll(".time")
+.forEach(time=>{
+
+    if(time.classList.contains("booked")) return;
+
+    time.addEventListener("click",()=>{
+
+        document.querySelectorAll(".time")
+            .forEach(t=>t.classList.remove("selected"));
+
+        time.classList.add("selected");
+
+        selectedTime=time.textContent.trim();
+
+    });
+
+});
+
+
+/* STEP */
+
+function setStep(n){
+
+    steps.forEach((step,i)=>{
+
+        step.classList.toggle(
+            "active",
+            i<n
+        );
+
+    });
+
+}
+
+
+/* DOCTOR NEXT */
+
+document.getElementById("doctorNext")
+.addEventListener("click",()=>{
+
+    if(!selectedDepartment){
+
+        alert("Please select a department.");
+
+        return;
+
+    }
+
+
+    if(!selectedDoctor){
+
+        alert("Please select a doctor.");
+
+        return;
+
+    }
+
+
+    document.getElementById("chosenDoctor")
+        .textContent=selectedDoctor.name;
+
+
+    doctorStep.style.display="none";
+    dateStep.style.display="block";
+
+    setStep(2);
+
+});
+
+
+/* DATE BACK */
+
+document.getElementById("dateBack")
+.addEventListener("click",()=>{
+
+    dateStep.style.display="none";
+    doctorStep.style.display="block";
+
+    setStep(1);
+
+});
+
+
+/* DATE NEXT */
+
+document.getElementById("dateNext")
+.addEventListener("click",()=>{
+
+    if(!selectedDate){
+
+        alert("Please select an appointment date.");
+
+        return;
+
+    }
+
+
+    if(!selectedTime){
+
+        alert("Please select an available time slot.");
+
+        return;
+
+    }
+
+
+    dateStep.style.display="none";
+    patientStep.style.display="block";
+
+    setStep(3);
+
+});
+
+
+/* PATIENT BACK */
+
+document.getElementById("patientBack")
+.addEventListener("click",()=>{
+
+    patientStep.style.display="none";
+    dateStep.style.display="block";
+
+    setStep(2);
+
+});
+
+
+/* PATIENT NEXT */
+
+document.getElementById("patientNext")
+.addEventListener("click",()=>{
+
+    const name=
+        document.getElementById("patientName")
+        .value.trim();
+
+    const phone=
+        document.getElementById("phone")
+        .value.trim();
+
+    const email=
+        document.getElementById("email")
+        .value.trim();
+
+    const dob=
+        document.getElementById("dob").value;
+
+    const gender=
+        document.getElementById("gender").value;
+
+    const reason=
+        document.getElementById("reason")
+        .value.trim();
+
+
+    if(name.length<2){
+
+        alert("Please enter the patient's full name.");
+
+        return;
+
+    }
+
+
+    if(!/^[0-9]{10}$/.test(phone)){
+
+        alert("Please enter a valid 10-digit mobile number.");
+
+        return;
+
+    }
+
+
+    if(!email.includes("@")){
+
+        alert("Please enter a valid email address.");
+
+        return;
+
+    }
+
+
+    if(!dob){
+
+        alert("Please enter date of birth.");
+
+        return;
+
+    }
+
+
+    if(!gender){
+
+        alert("Please select gender.");
+
+        return;
+
+    }
+
+
+    if(!reason){
+
+        alert("Please enter the reason for visit.");
+
+        return;
+
+    }
+
+
+    document.getElementById("reviewDoctor")
+        .textContent=selectedDoctor.name;
+
+    document.getElementById("reviewDepartment")
+        .textContent=selectedDepartment;
+
+    document.getElementById("reviewDate")
+        .textContent=formatDate(selectedDate);
+
+    document.getElementById("reviewTime")
+        .textContent=selectedTime;
+
+    document.getElementById("reviewPatient")
+        .textContent=name;
+
+    document.getElementById("reviewType")
+        .textContent=
+        document.getElementById("patientType").value;
+
+
+    patientStep.style.display="none";
+    confirmStep.style.display="block";
+
+    setStep(4);
+
+});
+
+
+/* CONFIRM BACK */
+
+document.getElementById("confirmBack")
+.addEventListener("click",()=>{
+
+    confirmStep.style.display="none";
+    patientStep.style.display="block";
+
+    setStep(3);
+
+});
+
+
+/* CONFIRM */
+
+document.getElementById("confirmButton")
+.addEventListener("click",()=>{
+
+    const bookingId=
+        "CPH-"+
+
+        new Date().getFullYear()+"-"+
+
+        Math.floor(
+            100000+
+            Math.random()*900000
+        );
+
+
+    const appointment={
+
+        id:bookingId,
+
+        patient:
+            document.getElementById("patientName").value,
+
+        phone:
+            document.getElementById("phone").value,
+
+        email:
+            document.getElementById("email").value,
+
+        doctor:selectedDoctor.name,
+
+        department:selectedDepartment,
+
+        date:selectedDate,
+
+        time:selectedTime,
+
+        consultationFee:selectedDoctor.fee,
+
+        createdAt:new Date().toISOString()
+
+    };
+
+
+    localStorage.setItem(
+        "carePointAppointment",
+        JSON.stringify(appointment)
+    );
+
+
+    document.getElementById("bookingId")
+        .textContent=bookingId;
+
+    document.getElementById("successPatient")
+        .textContent=appointment.patient;
+
+    document.getElementById("successDoctor")
+        .textContent=appointment.doctor;
+
+    document.getElementById("successDepartment")
+        .textContent=appointment.department;
+
+    document.getElementById("successDate")
+        .textContent=formatDate(appointment.date);
+
+    document.getElementById("successTime")
+        .textContent=appointment.time;
+
+
+    confirmStep.style.display="none";
+    successStep.style.display="block";
+
+    steps.forEach(s=>s.classList.remove("active"));
+
+});
+
+
+/* DATE FORMAT */
+
+function formatDate(date){
+
+    return new Date(date+"T00:00:00")
+        .toLocaleDateString("en-IN",{
+
+            weekday:"long",
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+
+        });
+
+}
+
+</script>
+
+</body>
+</html>
+```
